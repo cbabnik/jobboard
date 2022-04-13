@@ -1,0 +1,18 @@
+type Filters @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  Jobs: [Jobs] @manyToMany(relationName: "JobsFilters")
+}
+
+type Jobs @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  title: String
+  description: String
+  minutesTaken: Int
+  started: Boolean
+  onhold: Boolean
+  done: Boolean
+  Filters: [Filters] @manyToMany(relationName: "JobsFilters")
+  creationDate: AWSDateTime
+}
+ 
