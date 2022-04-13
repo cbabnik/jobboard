@@ -8,48 +8,37 @@
 import React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Text, View } from "@aws-amplify/ui-react";
-export default function Header(props) {
+export default function Label(props) {
   const { overrides, ...rest } = props;
   return (
     <View
-      width="1440px"
-      height="70px"
+      width="355px"
+      height="40px"
       position="relative"
       padding="0px 0px 0px 0px"
       {...rest}
-      {...getOverrideProps(overrides, "Header")}
+      {...getOverrideProps(overrides, "Label")}
     >
-      <View
-        height="70px"
-        position="absolute"
-        top="0px"
-        left="0px"
-        right="0px"
-        border="1px SOLID rgba(0,0,0,1)"
-        padding="0px 0px 0px 0px"
-        backgroundColor="rgba(98,54,22,0.54)"
-        {...getOverrideProps(overrides, "Rectangle 4")}
-      ></View>
       <Text
         fontFamily="Work Sans"
-        fontSize="34px"
+        fontSize="30px"
         fontWeight="700"
-        color="rgba(98,54,22,1)"
-        lineHeight="39.84375px"
+        color="rgba(0,0,0,1)"
+        lineHeight="35.15625px"
         textAlign="left"
         display="flex"
         direction="column"
         justifyContent="flex-start"
-        letterSpacing="-0.53px"
+        letterSpacing="-0.45px"
         position="absolute"
-        top="19.68%"
-        bottom="5%"
-        left="1.04%"
-        right="75.49%"
+        top="5%"
+        bottom="7.5%"
+        left="12.68%"
+        right="0%"
         padding="0px 0px 0px 0px"
         whiteSpace="pre-wrap"
-        children="IndiasJobBoard"
-        {...getOverrideProps(overrides, "IndiasJobBoard")}
+        children="Curtis House"
+        {...getOverrideProps(overrides, "Curtis House")}
       ></Text>
     </View>
   );

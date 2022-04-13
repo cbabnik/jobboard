@@ -4,10 +4,10 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
-export { default as Label } from "./Label";
-export { default as Filters } from "./Filters";
-export { default as TickBox } from "./TickBox";
-export { default as Jobs } from "./Jobs";
-export { default as Header } from "./Header";
-export { default as Categories } from "./Categories";
-export { default as Sidebar } from "./Sidebar";
+import React from "react";
+import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
+import { ViewProps } from "@aws-amplify/ui-react";
+export declare type TickBoxProps = React.PropsWithChildren<Partial<ViewProps> & {
+    overrides?: EscapeHatchProps | undefined | null;
+}>;
+export default function TickBox(props: TickBoxProps): React.ReactElement;
