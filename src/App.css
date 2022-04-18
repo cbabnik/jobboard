@@ -36,3 +36,82 @@
     transform: rotate(360deg);
   }
 }
+
+/* user defined past here */
+
+/* DIV expectation */
+/* 
+[----------HEADER-------------------------------]
+[SIDEBAR][Content <including sub items>         ]
+[       ][______________________________________]
+[       ][Category][Category][Category][Category]
+[       ][List    ][List    ][List    ][List    ]
+[       ][                                      ]
+[       ][                                      ]
+[       ][                                      ]
+[       ][                                      ]
+[       ][                                      ]
+[       ][                                      ]
+[       ][                                      ]
+[       ][                                      ]
+[       ][                                      ]
+[       ][                                      ]
+*/
+
+div {
+  text-indent: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, hr {
+  margin: 0;
+}
+
+body > #root {
+  height: 100%;
+  min-height: 100vh;
+}
+.app {
+  height: 100%;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: #AA9281;
+  color: #623616;
+  height: 60px;
+  line-height: 60px;
+  font-family: work sans;
+}
+.sidebar {
+  background-color: powderblue;
+  width: 25%;
+  position: relative;
+  top: -29px;
+  /* todo: make this dynamic */
+  /*min-width: 200px*/
+  display: inline-block;
+  height: calc(100vh - 89px);
+  /* todo: let this stretch to fill or even match longer elements*/
+}
+.main {
+  background-color: pink;
+  display: inline-block;
+  height: calc(100vh - 60px);
+  /* todo: make this fill or expand to match children*/
+  width: 75%;
+  min-width: 620px;
+  /* todo: make this fill */
+}
+.jobsHeader {
+  background-color: orange;
+}
+.jobsColumn {
+  background-color: yellow;
+  display: inline-block;
+  width: calc(33.3% - 6px);
+  min-width: 200px;
+  margin: 3px;
+  min-height: 50vh
+}
