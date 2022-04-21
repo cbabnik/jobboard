@@ -157,8 +157,10 @@ body > #root {
 }
 .jobDetails > textarea {
   width: 98%;
-  height: calc(100% - 80pt);
+  margin: 1%;
+  height: calc(50% - 100pt);
   resize: none;
+  background-color: lightyellow;
 }
 
 /* images */

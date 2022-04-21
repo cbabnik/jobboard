@@ -33,18 +33,50 @@ class Job extends React.Component {
       this.state = {
          title: this.props.title,
          description: this.props.description,
-         detailsVisible: false
+         notes: "",
+         timeSpent: 0,
+
+         detailsVisible: false,
+         enableLog: false,
+         enableSave: false,
+
       }
+   }
+
+   onTextEdit = (ev) => {
+      this.setState({
+         enableSave: true,
+      })
+   }
+
+   onSave = (ev) => {
+      console.log(`note saved`)
+      const notes = document.getElementById(`notes`).value
+      this.setState({
+         notes: notes,
+         enableSave: false,
+      })
    }
 
    details() {
       return (
          <div onClick={this.toggleDetails} className='detailsShading'>
             <div onClick={(ev)=>{ev.stopPropagation()}}className='jobDetails'>
-               <h1>{this.state.title}</h1>
-               <textarea>{this.state.description}</textarea>
+               <h1>Task: {this.state.title}</h1>
+               Details
+               <textarea value={this.state.description} disabled />
+               Notes
+               <textarea id={`notes`} onChange={this.onTextEdit} defaultValue={this.state.notes} />
+               <input type="button" onClick={this.onSave} value="Save Notes" disabled={!this.state.enableSave} />
                <footer>
-                  Time spent on task: <input /> -- File upload <input type="file" disabled />
+                  <hr />
+                  Log minutes (for now can do this in notes) &ensp;
+                  <input disabled /> &ensp;
+                  <input type="button" value="Log" disabled={!this.state.enableLog} />
+                  <hr />
+                  File submission &ensp;
+                  <input type="file" disabled /> &ensp;
+                  <input type="button" value="Submit" disabled />
                </footer>
             </div>
          </div>
@@ -60,11 +92,18 @@ class Job extends React.Component {
    render() {
       return (
          <div>
-            <div className='job' onClick={this.toggleDetails} draggable onDragStart={this.props.grab} onDragEnd={this.props.drop}>
+            <div 
+               className='job' 
+               onClick={this.toggleDetails}
+               draggable
+               onDragStart={this.props.grab}
+               onDragEnd={this.props.drop}
+            >
                <h4>{this.state.title}</h4>
-               {this.state.description}
+               {this.state.description.length > 120?
+                this.state.description.slice(0,120)+"...":
+                this.state.description}
             </div>
-
             {this.state.detailsVisible?this.details():null}
          </div>
       )
@@ -99,11 +138,9 @@ class App extends React.Component {
    }
 
    moveJob = (jobKey, toCol) => {
-      console.log("executing moveJobs")
-      console.log("removing job " + jobKey)
+      console.log("moving job " + jobKey)
       const newJobs = this.state.jobs.map((a)=>[...a])
       // remove from old position
-      console.log(newJobs)
       let job;
       for (let i = 0; i < newJobs.length; i++) {
          job = newJobs[i].find((j)=>j.key===jobKey)
@@ -120,23 +157,22 @@ class App extends React.Component {
    }
    
    grabJob = (ev, jobKey) => {
-      console.log("grabbed at " + ev.pageX)
-
       const pageWidth = getWidth()
       const colWidth = pageWidth/4
       const centerX = Math.floor(ev.pageX/colWidth)*colWidth + colWidth/2
       //console.log("colWidth " + colWidth)
-      console.log("center grabbed from " + centerX)
+      console.log("grabbed at " + ev.pageX +
+                  ", center grabbed from " + centerX);
       this.setState({grabOffset: centerX-ev.pageX})
       this.setState({grabbedJob: jobKey})
    }
 
    dropJob = (ev) => {
       ev.preventDefault();
-      console.log("dropped at " + ev.pageX)
-      console.log("center dropped at " + (ev.pageX + this.state.grabOffset))
       const droppedInto = Math.floor((ev.pageX+this.state.grabOffset) / (getWidth()/4))
-      console.log("dropped into column " + droppedInto)
+      console.log("dropped at " + ev.pageX + 
+                  ", center dropped at " + (ev.pageX + this.state.grabOffset) + 
+                  ", col " + droppedInto)
 
       this.moveJob(this.state.grabbedJob, droppedInto)
    }
