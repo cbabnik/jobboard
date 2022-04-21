@@ -62,6 +62,7 @@ div {
   text-indent: 10px;
   margin: 0;
   padding: 0;
+  border: 0;
 }
 
 h1, h2, h3, h4, hr {
@@ -69,6 +70,7 @@ h1, h2, h3, h4, hr {
 }
 
 body > #root {
+  background-color: lightgray;
   height: 100%;
   min-height: 100vh;
 }
@@ -96,22 +98,73 @@ body > #root {
   /* todo: let this stretch to fill or even match longer elements*/
 }
 .main {
-  background-color: pink;
+  /*background-color: pink;*/
   display: inline-block;
   height: calc(100vh - 60px);
   /* todo: make this fill or expand to match children*/
-  width: 75%;
+  width: 100%;
   min-width: 620px;
   /* todo: make this fill */
 }
-.jobsHeader {
-  background-color: orange;
+
+.jobsColumnsBox {
+  background-color: lightgray;
+  display: flex;
+  align-items: flex-start;
 }
 .jobsColumn {
-  background-color: yellow;
   display: inline-block;
-  width: calc(33.3% - 6px);
-  min-width: 200px;
+  width: calc(24% - 6px);
   margin: 3px;
   min-height: 50vh
 }
+.job {
+  background-image: url("https://cdn.pixabay.com/photo/2013/07/12/14/29/sticky-note-148284_1280.png");
+  background-size: 100% 100%;
+  aspect-ratio: 4/3;
+  margin: 5px;
+}
+.job > p {
+  text-indent: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+/* popup details */
+
+.detailsShading {
+  background-color: rgba(0.6,0.6,0.6,0.6);
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  left: 0;
+  top: 0;
+}
+.jobDetails {
+  background-color: #feff9c;
+  position: absolute;
+  width: 80vw;
+  height: 70vh;
+  left: 10vw;
+  top: 15vh;
+}
+.jobDetails > footer {
+  position: absolute;
+  bottom: 3px;
+  text-align: right;
+}
+.jobDetails > textarea {
+  width: 98%;
+  height: calc(100% - 80pt);
+  resize: none;
+}
+
+/* images */
+/*
+sticky note
+"https://cdn.pixabay.com/photo/2013/07/12/14/29/sticky-note-148284_1280.png"
+chungus
+"https://i.imgur.com/euLdMxk.png"
+*/
