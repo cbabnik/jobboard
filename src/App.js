@@ -5,11 +5,19 @@ import Work from "./View/Work"
 import Home from "./View/Home"
 import Signin from "./View/Authentication/signin"
 
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Outlet, Navigate, Route } from "react-router-dom"
 
 // todo:
 // protect / route
 // change /welcome to / and / to /work (after welcome page is ready)
+
+const ProtectedRoute = ({children}) => {
+   if (!localStorage.getItem("isAuthenticated")) {
+     return <Navigate to="/signin" replace />;
+   }
+
+   return children ? children : <Outlet />;
+};
 
 function App() {
    return (
@@ -17,7 +25,8 @@ function App() {
          <Routes>
             <Route exact path="/signin" element={<Signin />} />
             <Route exact path="/welcome" element={<Home />} />
-            <Route exact path="/" element={<Work />} />
+            <Route exact path="/" element={<ProtectedRoute><Work /></ProtectedRoute>} />
+            <Route path="*" element={<p>There's nothing here: 404!</p>} />
          </Routes>
       </BrowserRouter>
    )

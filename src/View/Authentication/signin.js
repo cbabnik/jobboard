@@ -1,6 +1,8 @@
 // taken from https://github.com/LuminousIT/auth-protected-route/blob/master/src/View/Authentication/Signin.js
 
 import React, { useState } from "react";
+import { Auth } from 'aws-amplify';
+import { Authenticator } from '@aws-amplify/ui-react';
 
 function Signin() {
   const [userData, setUserData] = useState({ username: "", password: "" });
@@ -16,7 +18,16 @@ function Signin() {
     });
   };
 
-  const handleSubmit = (e) => {
+  
+async function signIn(username, password) {
+    try {
+        const user = await Auth.signIn(username, password);
+    } catch (error) {
+        console.log('error signing in', error);
+    }
+}
+
+const handleSubmit = async (e) => {
     e.preventDefault();
     //if username or password field is empty, return error message
     if (userData.username === "" || userData.password === "") {
@@ -26,7 +37,7 @@ function Signin() {
     } else if (userData.username === "admin" && userData.password === "123456") {
       //Signin Success
       localStorage.setItem("isAuthenticated", "true");
-      window.location.pathname = "/";
+      window.location.pathname = "/"; // should probably use Navigate
     } else {
       //If credentials entered is invalid
       setErrorMessage((prevState) => ({ value: "Invalid username/password" }));
@@ -34,47 +45,13 @@ function Signin() {
   };
 
   return (
-    <div className="text-center">
-      <h1>Signin User</h1>
-      <form
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <div className="form-group">
-          <label>Username</label>
-          <input
-            className="form-control"
-            type="text"
-            name="username"
-            onChange={(e) => handleInputChange(e)}
-          />
-        </div>
-
-        <div className="form-group">
-          <label>Password</label>
-          <input
-            className="form-control"
-            type="password"
-            name="password"
-            onChange={(e) => handleInputChange(e)}
-          />
-        </div>
-        <button
-          type="submit"
-          className="btn btn-primary"
-          onClick={handleSubmit}
-        >
-          Submit
-        </button>
-
-        {errorMessage.value && (
-          <p className="text-danger"> {errorMessage.value} </p>
-        )}
-      </form>
+    <div>
+      <div style={{width: '200px', height: '200px'}} />
+      <div style={{alignItems:'center', display: 'flex', justifyContent: 'center'}}>
+        <Authenticator hideSignUp >
+          
+        </Authenticator>
+      </div>
     </div>
   );
 }
