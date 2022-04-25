@@ -1,5 +1,80 @@
 export const schema = {
     "models": {
+        "EffortLogs": {
+            "name": "EffortLogs",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "minutes": {
+                    "name": "minutes",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "jobsID": {
+                    "name": "jobsID",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "EffortLogs",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byJobs",
+                        "fields": [
+                            "jobsID"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "Filters": {
             "name": "Filters",
             "fields": {
@@ -97,31 +172,17 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "notes": {
+                    "name": "notes",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "minutesTaken": {
                     "name": "minutesTaken",
                     "isArray": false,
                     "type": "Int",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "started": {
-                    "name": "started",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "onhold": {
-                    "name": "onhold",
-                    "isArray": false,
-                    "type": "Boolean",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "done": {
-                    "name": "done",
-                    "isArray": false,
-                    "type": "Boolean",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -139,12 +200,26 @@ export const schema = {
                         "associatedWith": "jobs"
                     }
                 },
-                "creationDate": {
-                    "name": "creationDate",
+                "column": {
+                    "name": "column",
                     "isArray": false,
-                    "type": "AWSDateTime",
+                    "type": "Int",
                     "isRequired": false,
                     "attributes": []
+                },
+                "EffortLogs": {
+                    "name": "EffortLogs",
+                    "isArray": true,
+                    "type": {
+                        "model": "EffortLogs"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "jobsID"
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -253,5 +328,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "fedacf2231656bb460c0496325da190b"
+    "version": "ca59c670181e69847c40d2942108d8f8"
 };

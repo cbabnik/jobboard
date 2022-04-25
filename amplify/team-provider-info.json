@@ -1,15 +1,20 @@
 {
-  "staging": {
+  "prod": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-indiasjobboard-staging-201641-authRole",
-      "UnauthRoleArn": "arn:aws:iam::336776519167:role/amplify-indiasjobboard-staging-201641-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::336776519167:role/amplify-indiasjobboard-staging-201641-authRole",
+      "AuthRoleName": "amplify-indiasjobboard-prod-225930-authRole",
+      "UnauthRoleArn": "arn:aws:iam::336776519167:role/amplify-indiasjobboard-prod-225930-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::336776519167:role/amplify-indiasjobboard-prod-225930-authRole",
       "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-indiasjobboard-staging-201641-deployment",
-      "UnauthRoleName": "amplify-indiasjobboard-staging-201641-unauthRole",
-      "StackName": "amplify-indiasjobboard-staging-201641",
-      "StackId": "arn:aws:cloudformation:us-west-2:336776519167:stack/amplify-indiasjobboard-staging-201641/a3b98820-b6af-11ec-8e4b-029e7dcbb455",
+      "DeploymentBucketName": "amplify-indiasjobboard-prod-225930-deployment",
+      "UnauthRoleName": "amplify-indiasjobboard-prod-225930-unauthRole",
+      "StackName": "amplify-indiasjobboard-prod-225930",
+      "StackId": "arn:aws:cloudformation:us-west-2:336776519167:stack/amplify-indiasjobboard-prod-225930/626f3d80-b6c6-11ec-918a-0255a5d4063f",
       "AmplifyAppId": "dqp2efhnzllil"
+    },
+    "categories": {
+      "auth": {
+        "IndiasJobBoard": {}
+      }
     }
   }
 }
