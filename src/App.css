@@ -145,7 +145,7 @@ body > #root {
 
 .detailsShading {
   background-color: rgba(0.6,0.6,0.6,0.6);
-  position: absolute;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   left: 0;
@@ -154,7 +154,7 @@ body > #root {
 }
 .jobDetails {
   background-color: #feff9c;
-  position: absolute;
+  position: fixed;
   width: 80vw;
   height: 70vh;
   left: 10vw;
