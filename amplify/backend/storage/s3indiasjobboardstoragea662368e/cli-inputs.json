@@ -1,0 +1,12 @@
+{
+  "resourceName": "s3indiasjobboardstoragea662368e",
+  "bucketName": "indiasjobboard-storage-a662368e",
+  "policyUUID": "f9d2d93f",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}
