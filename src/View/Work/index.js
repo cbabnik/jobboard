@@ -120,7 +120,7 @@ class Job extends React.Component {
                onDragEnd={this.props.drop}
             >
                <h4>{this.state.title}</h4>
-               {this.state.description.length > 160?
+               {this.state.description&&this.state.description.length > 160?
                 this.state.description.slice(0,160)+"...":
                 this.state.description}
             </div>
