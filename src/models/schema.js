@@ -322,6 +322,24 @@ export const schema = {
                 {
                     "type": "model",
                     "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byFilters",
+                        "fields": [
+                            "filtersID"
+                        ]
+                    }
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byJobs",
+                        "fields": [
+                            "jobsID"
+                        ]
+                    }
                 }
             ]
         }

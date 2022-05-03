@@ -7,6 +7,10 @@ import Signin from "./View/Authentication/signin"
 
 import { BrowserRouter, Routes, Outlet, Navigate, Route } from "react-router-dom"
 
+import Amplify from 'aws-amplify';
+import awsconfig from './aws-exports';
+Amplify.configure(awsconfig);
+
 // todo:
 // protect / route
 // change /welcome to / and / to /work (after welcome page is ready)
