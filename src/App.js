@@ -15,25 +15,57 @@ Amplify.configure(awsconfig);
 // protect / route
 // change /welcome to / and / to /work (after welcome page is ready)
 
+let userTemp;
+
 const ProtectedRoute = ({children}) => {
-   if (!localStorage.getItem("isAuthenticated")) {
+   console.log("Welcome ", userTemp.username)
+   if (!userTemp) {
      return <Navigate to="/signin" replace />;
    }
 
    return children ? children : <Outlet />;
 };
 
-function App() {
-   return (
-      <BrowserRouter>
-         <Routes>
-            <Route exact path="/signin" element={<Signin />} />
-            <Route exact path="/welcome" element={<Home />} />
-            <Route exact path="/" element={<ProtectedRoute><Work /></ProtectedRoute>} />
-            <Route path="*" element={<p>There's nothing here: 404!</p>} />
-         </Routes>
-      </BrowserRouter>
-   )
+class App extends React.Component {
+
+   constructor(props) {
+      super(props)
+
+      this.state = {
+         user: null,
+         auth: false
+      }
+   }
+
+   async componentDidMount() {
+      this.getAuth();
+   }
+
+   async getAuth() {
+      try {
+         const user = await Amplify.Auth.currentAuthenticatedUser()
+         userTemp = user;
+         this.setState({
+            user: user,
+            auth: true,
+         })
+      } catch (err) {
+         console.log("Auth error: ", err)
+      }
+   }
+
+   render() {
+      return this.state.auth? (
+         <BrowserRouter>
+            <Routes>
+               <Route exact path="/signin" element={<Signin />} />
+               <Route exact path="/welcome" element={<Home />} />
+               <Route exact path="/" element={<ProtectedRoute><Work /></ProtectedRoute>} />
+               <Route path="*" element={<p>There's nothing here: 404!</p>} />
+            </Routes>
+         </BrowserRouter>
+      ) : (<div>Fetching Credentials...</div>)
+   }
 }
 
 export default App;

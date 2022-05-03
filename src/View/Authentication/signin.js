@@ -3,13 +3,11 @@
 import { Authenticator } from '@aws-amplify/ui-react';
 
 function Signin() {
-  console.log("auth", localStorage.getItem("isAuthenticated"));
-
   return (
     <div>
       <div style={{width: '200px', height: '200px'}} />
       <div style={{alignItems:'center', display: 'flex', justifyContent: 'center'}}>
-        <Authenticator hideSignUp >
+        <Authenticator>
           
         </Authenticator>
       </div>
