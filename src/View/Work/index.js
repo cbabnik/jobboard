@@ -3,6 +3,9 @@ import React from 'react';
 import '../../App.css';
 import { v4 as uuidv4} from 'uuid';
 
+import { DataStore } from 'aws-amplify';
+import { Jobs } from '../../models'
+
 // TODO:
 // fix whitespace gap
 // select some better fonts (lesson)
@@ -32,7 +35,8 @@ class Job extends React.Component {
       this.state = {
          title: this.props.title,
          description: this.props.description,
-         notes: "",
+         id: this.props.id,
+         notes: this.props.notes,
          timeSpent: 0,
 
          detailsVisible: false,
@@ -55,6 +59,21 @@ class Job extends React.Component {
          notes: notes,
          enableSave: false,
       })
+      this.saveJobNotes(notes)
+   }
+
+   saveJobNotes = async (notes) => {
+      const original = await DataStore.query(Jobs, this.state.id);
+
+      try {
+         await DataStore.save(
+            Jobs.copyOf(original, updated => {
+               updated.notes = notes;
+            })
+         );
+      } catch (err) {
+         console.log(err)
+      }
    }
 
    details() {
@@ -110,30 +129,46 @@ class Job extends React.Component {
 }
 
 class Work extends React.Component {
+
    constructor(props) {
       super(props)
 
-      // grab={(ev) => this.grabJob(ev)} drop={(ev) => this.dropJob(ev)
-      const job = (title) => {
-         const key = uuidv4();
-         const j = <Job 
-            title={title}
-            description={"Lorem Ipsum"}
-            key={key}
-            grab={(ev) => this.grabJob(ev, key)}
-            drop={(ev) => this.dropJob(ev)}
-         />
-         return j
+      this.state = {
+         jobs: [[],[],[],[]]
+      }
+   }
+
+   async componentWillUnmount() {
+      console.log("Work unmounting!");
+   }
+   async componentDidMount() {
+      console.log("Work mounted!");
+      // bug! runs twice https://linguinecode.com/post/avoid-react-componentdidmount-called-multiple-times
+
+      try {
+         const jobs = await DataStore.query(Jobs);
+         console.log(jobs)
+         this.setState({
+            jobs: [0,1,2,3].map(col => jobs.filter(j => j.column === col).map(j => this.job(j)))
+         })
+      } catch (error) {
+         console.log("Error fetching jobs", error)
       }
 
-      this.state = {
-         jobs: [
-            [job("FooBar")],
-            [job("FooBar 2")],
-            [job("FooBar 3")],
-            [job("FooBar 4")],
-         ]
-      }
+   }
+   
+   job = (jobData) => {
+      const key = uuidv4();
+      const j = <Job 
+         title={jobData.title}
+         description={jobData.description}
+         key={key}
+         notes={jobData.notes}
+         id={jobData.id}
+         grab={(ev) => this.grabJob(ev, key)}
+         drop={(ev) => this.dropJob(ev)}
+      />
+      return j
    }
 
    moveJob = (jobKey, toCol) => {
@@ -174,7 +209,49 @@ class Work extends React.Component {
                   ", col " + droppedInto)
 
       this.moveJob(this.state.grabbedJob, droppedInto)
+      this.saveJobCol(this.state.grabbedJob, droppedInto)
    }
+
+   findJob = (jobKey) => {
+      let job;
+      for (let i = 0; i < this.state.jobs.length; i++) {
+         job = this.state.jobs[i].find((j)=>j.key===jobKey)
+         if ( job ) {
+            return job
+         }
+      }
+   }
+
+   saveJobCol = async (jobKey, col) => {
+      const job = this.findJob(jobKey)
+      const dynamoId = job.props.id
+      const original = await DataStore.query(Jobs, dynamoId);
+      try {
+         await DataStore.save(
+            Jobs.copyOf(original, updated => {
+               updated.column = col;
+            })
+         );
+      } catch (err) {
+         console.log(err)
+      }
+      console.log("Saving job col")
+   }
+
+   saveJobNotes = async (notes) => {
+      const original = await DataStore.query(Jobs, this.state.id);
+
+      try {
+         await DataStore.save(
+            Jobs.copyOf(original, updated => {
+               updated.notes = notes;
+            })
+         );
+      } catch (err) {
+         console.log(err)
+      }
+   }
+
 
    render() {
       return (
