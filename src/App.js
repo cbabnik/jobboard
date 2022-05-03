@@ -51,6 +51,10 @@ class App extends React.Component {
          })
       } catch (err) {
          console.log("Auth error: ", err)
+         this.setState({
+            user: null,
+            auth: true,
+         })
       }
    }
 
