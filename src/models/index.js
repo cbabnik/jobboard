@@ -4,9 +4,10 @@ import { schema } from './schema';
 
 
 
-const { Filters, Jobs, JobsFilters } = initSchema(schema);
+const { EffortLogs, Filters, Jobs, JobsFilters } = initSchema(schema);
 
 export {
+  EffortLogs,
   Filters,
   Jobs,
   JobsFilters

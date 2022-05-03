@@ -4,6 +4,10 @@ import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplif
 
 
 
+type EffortLogsMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type FiltersMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
@@ -14,6 +18,16 @@ type JobsMetaData = {
 
 type JobsFiltersMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+export declare class EffortLogs {
+  readonly id: string;
+  readonly minutes?: number | null;
+  readonly jobsID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<EffortLogs, EffortLogsMetaData>);
+  static copyOf(source: EffortLogs, mutator: (draft: MutableModel<EffortLogs, EffortLogsMetaData>) => MutableModel<EffortLogs, EffortLogsMetaData> | void): EffortLogs;
 }
 
 export declare class Filters {
@@ -30,12 +44,11 @@ export declare class Jobs {
   readonly id: string;
   readonly title?: string | null;
   readonly description?: string | null;
+  readonly notes?: string | null;
   readonly minutesTaken?: number | null;
-  readonly started?: boolean | null;
-  readonly onhold?: boolean | null;
-  readonly done?: boolean | null;
   readonly Filters?: (JobsFilters | null)[] | null;
-  readonly creationDate?: string | null;
+  readonly column?: number | null;
+  readonly EffortLogs?: (EffortLogs | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Jobs, JobsMetaData>);

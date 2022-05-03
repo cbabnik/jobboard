@@ -8,8 +8,9 @@
           "defaultAuthentication": {
             "authenticationType": "API_KEY",
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 30,
-              "description": "api key description"
+              "apiKeyExpirationDays": 365,
+              "apiKeyExpirationDate": "2023-05-03T01:24:51.102Z",
+              "description": "Full API Access"
             }
           },
           "additionalAuthenticationProviders": [
@@ -18,7 +19,39 @@
             }
           ]
         }
+      },
+      "dependsOn": []
+    }
+  },
+  "auth": {
+    "IndiasJobBoard": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "signupAttributes": [],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
       }
+    }
+  },
+  "storage": {
+    "s3indiasjobboardstoragea662368e": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
     }
   }
 }
