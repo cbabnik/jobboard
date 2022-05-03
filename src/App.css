@@ -123,13 +123,22 @@ body > #root {
   background-size: 100% 100%;
   aspect-ratio: 4/3;
   margin: 5px;
+  overflow: hidden;
+  position: relative;
 }
 .job > p {
   text-indent: 10px;
   margin: 0;
   padding: 0;
 }
-
+.jobCorner {
+  background-color: pink;
+  float: right;
+  bottom: 0;
+  right: 0;
+  width: 25%;
+  height: 25%;
+}
 
 
 /* popup details */
@@ -161,6 +170,13 @@ body > #root {
   height: calc(50% - 100pt);
   resize: none;
   background-color: lightyellow;
+}
+.jobDetails > div {
+  width: 98%;
+  margin: 1%;
+  height: calc(50% - 100pt);
+  background-color: lightyellow;
+  overflow: scroll;
 }
 
 /* images */

@@ -2,6 +2,7 @@ import '@aws-amplify/ui-react/styles.css'
 import React from 'react';
 import '../../App.css';
 import { v4 as uuidv4} from 'uuid';
+import ReactMarkdown from 'react-markdown';
 
 import { DataStore } from 'aws-amplify';
 import { Jobs } from '../../models'
@@ -82,7 +83,8 @@ class Job extends React.Component {
             <div onClick={(ev)=>{ev.stopPropagation()}}className='jobDetails'>
                <h1>Task: {this.state.title}</h1>
                Details
-               <textarea value={this.state.description} disabled />
+               <div><ReactMarkdown>{this.state.description}</ReactMarkdown></div>
+               
                Notes
                <textarea id={`notes`} onChange={this.onTextEdit} defaultValue={this.state.notes} />
                <input type="button" onClick={this.onSave} value="Save Notes" disabled={!this.state.enableSave} />
@@ -118,8 +120,8 @@ class Job extends React.Component {
                onDragEnd={this.props.drop}
             >
                <h4>{this.state.title}</h4>
-               {this.state.description.length > 120?
-                this.state.description.slice(0,120)+"...":
+               {this.state.description.length > 160?
+                this.state.description.slice(0,160)+"...":
                 this.state.description}
             </div>
             {this.state.detailsVisible?this.details():null}
