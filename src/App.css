@@ -150,6 +150,7 @@ body > #root {
   height: 100vh;
   left: 0;
   top: 0;
+  z-index:10000;
 }
 .jobDetails {
   background-color: #feff9c;
@@ -158,6 +159,7 @@ body > #root {
   height: 70vh;
   left: 10vw;
   top: 15vh;
+  z-index:10000;
 }
 .jobDetails > footer {
   position: absolute;
