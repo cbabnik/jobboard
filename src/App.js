@@ -18,7 +18,7 @@ Amplify.configure(awsconfig);
 let userTemp;
 
 const ProtectedRoute = ({children}) => {
-   console.log("Welcome ", userTemp.username)
+   console.log("Welcome ", userTemp)
    if (!userTemp) {
      return <Navigate to="/signin" replace />;
    }
@@ -44,7 +44,7 @@ class App extends React.Component {
    async getAuth() {
       try {
          const user = await Amplify.Auth.currentAuthenticatedUser()
-         userTemp = user;
+         userTemp = user.username;
          this.setState({
             user: user,
             auth: true,

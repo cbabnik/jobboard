@@ -169,14 +169,14 @@ body > #root {
 .jobDetails > textarea {
   width: 98%;
   margin: 1%;
-  height: calc(50% - 100pt);
+  height: calc(100% - 200pt);
   resize: none;
   background-color: lightyellow;
 }
-.jobDetails > div {
+.divArea {
   width: 98%;
   margin: 1%;
-  height: calc(50% - 100pt);
+  height: calc(100% - 200pt);
   background-color: lightyellow;
   overflow: scroll;
 }

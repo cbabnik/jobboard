@@ -44,6 +44,8 @@ class Job extends React.Component {
          enableLog: false,
          enableSave: false,
 
+         notesVisible: false,
+
       }
    }
 
@@ -61,6 +63,12 @@ class Job extends React.Component {
          enableSave: false,
       })
       this.saveJobNotes(notes)
+   }
+
+   toggleNotes = (ev) => {
+      this.setState({
+         notesVisible: !this.state.notesVisible
+      })
    }
 
    saveJobNotes = async (notes) => {
@@ -82,12 +90,18 @@ class Job extends React.Component {
          <div onClick={this.toggleDetails} className='detailsShading'>
             <div onClick={(ev)=>{ev.stopPropagation()}}className='jobDetails'>
                <h1>Task: {this.state.title}</h1>
-               Details
-               <div><ReactMarkdown>{this.state.description}</ReactMarkdown></div>
+               {this.state.notesVisible?"Notes":"Details"}
+               {this.state.notesVisible?
+               (<textarea id={`notes`} onChange={this.onTextEdit} defaultValue={this.state.notes} />):
+               (<div className="divArea"><ReactMarkdown>{this.state.description}</ReactMarkdown></div>)
+               }
                
-               Notes
-               <textarea id={`notes`} onChange={this.onTextEdit} defaultValue={this.state.notes} />
-               <input type="button" onClick={this.onSave} value="Save Notes" disabled={!this.state.enableSave} />
+               {this.state.notesVisible?
+               <div>
+                  <input type="button" onClick={this.onSave} value="Save Notes" disabled={!this.state.enableSave} />
+                  <input type="button" onClick={this.toggleNotes} value="Show Details" />
+               </div>:
+               <input type="button" onClick={this.toggleNotes} value="Show Notes" />}
                <footer>
                   <hr />
                   Log minutes (for now can do this in notes) &ensp;
@@ -143,9 +157,10 @@ class Work extends React.Component {
    async componentWillUnmount() {
       console.log("Work unmounting!");
    }
-   async componentDidMount() {
-      console.log("Work mounted!");
+
+   async refresh() {
       // bug! runs twice https://linguinecode.com/post/avoid-react-componentdidmount-called-multiple-times
+      // bug first time is empty?? (only if not auth)
 
       try {
          const jobs = await DataStore.query(Jobs);
@@ -156,7 +171,11 @@ class Work extends React.Component {
       } catch (error) {
          console.log("Error fetching jobs", error)
       }
-
+   }
+   
+   async componentDidMount() {
+      console.log("Work mounted!");
+      this.refresh()
    }
    
    job = (jobData) => {
