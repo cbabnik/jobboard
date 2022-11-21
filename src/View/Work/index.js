@@ -4,8 +4,8 @@ import '../../App.css';
 import { v4 as uuidv4} from 'uuid';
 import ReactMarkdown from 'react-markdown';
 
-import { DataStore } from 'aws-amplify';
-import { Jobs } from '../../models'
+import { Hub, DataStore } from 'aws-amplify';
+import { EffortLogs, Jobs } from '../../models'
 
 // TODO:
 // fix whitespace gap
@@ -175,7 +175,13 @@ class Work extends React.Component {
    
    async componentDidMount() {
       console.log("Work mounted!");
-      this.refresh()
+      const listener = Hub.listen("datastore", async hubData => {
+         const  { event, data } = hubData.payload;
+         if (event === "ready") {
+            this.refresh();
+         }
+      })
+      DataStore.start();
    }
    
    job = (jobData) => {
