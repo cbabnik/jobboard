@@ -2,6 +2,7 @@ type EffortLogs @model @auth(rules: [{allow: public}]) {
   id: ID!
   minutes: Int
   jobsID: ID! @index(name: "byJobs")
+  date: AWSDate
 }
 
 type Filters @model @auth(rules: [{allow: public}]) {

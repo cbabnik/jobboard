@@ -4,7 +4,7 @@ import '../../App.css';
 import { v4 as uuidv4} from 'uuid';
 import ReactMarkdown from 'react-markdown';
 
-import { Hub, DataStore } from 'aws-amplify';
+import { Hub, DataStore, AWSDate } from 'aws-amplify';
 import { EffortLogs, Jobs } from '../../models'
 
 // TODO:
@@ -19,6 +19,7 @@ import { EffortLogs, Jobs } from '../../models'
 // duplicate state
 // fix indenting divs
 
+
 function getWidth() {
    return Math.max(
      document.body.scrollWidth,
@@ -29,6 +30,28 @@ function getWidth() {
    );
  }
 
+class EffortLog extends React.Component {
+   constructor(props) {
+      super(props);
+
+      this.state = {
+         jobTitle: this.props.jobTitle,
+         minutes: this.props.minutes,
+         date: this.props.date
+      }
+   }
+
+   render() {
+      return (
+         <div>
+            <div className='effortLog' >
+               <b>{new Date(this.state.date).toDateString()}: {this.state.minutes} minutes</b> ({this.state.jobTitle})
+            </div>
+         </div>
+      )
+   }
+}
+
 class Job extends React.Component {
    constructor(props) {
       super(props);
@@ -38,7 +61,7 @@ class Job extends React.Component {
          description: this.props.description,
          id: this.props.id,
          notes: this.props.notes,
-         timeSpent: 0,
+         timeSpent: this.props.minutes,
 
          detailsVisible: false,
          enableLog: false,
@@ -54,6 +77,11 @@ class Job extends React.Component {
          enableSave: true,
       })
    }
+   onLogNumberEdit = (ev) => {
+      this.setState({
+         enableLog: true,
+      })
+   }
 
    onSave = (ev) => {
       console.log(`note saved`)
@@ -61,8 +89,27 @@ class Job extends React.Component {
       this.setState({
          notes: notes,
          enableSave: false,
+         date: Date.now()
       })
       this.saveJobNotes(notes)
+   }
+
+   onLog = (ev) => {
+      console.log(`effort logged`)
+      const effortCount = document.getElementById(`effortCount`).value
+      const numEffort = Number(effortCount);
+
+      if (!Number.isInteger(numEffort))
+      {
+         alert(`Only log integer numbers please. (not ${effortCount})`)
+         return;
+      }
+
+      this.setState({
+         enableLog: false,
+         timeSpent: this.state.timeSpent+numEffort
+      })
+      this.saveEffort(numEffort);
    }
 
    toggleNotes = (ev) => {
@@ -80,6 +127,20 @@ class Job extends React.Component {
                updated.notes = notes;
             })
          );
+      } catch (err) {
+         console.log(err)
+      }
+   }
+
+   saveEffort = async (minutes) => {
+      try {
+         await DataStore.save(
+            new EffortLogs({
+               jobsID: this.state.id,
+               minutes: minutes,
+               date: (new Date()).toISOString().substring(0, 10)
+            })
+         )
       } catch (err) {
          console.log(err)
       }
@@ -103,14 +164,21 @@ class Job extends React.Component {
                </div>:
                <input type="button" onClick={this.toggleNotes} value="Show Notes" />}
                <footer>
+                  <div className="one">
+                     Logged: <b>{this.state.timeSpent}</b> minutes
+                  </div>
                   <hr />
-                  Log minutes (for now can do this in notes) &ensp;
-                  <input disabled /> &ensp;
-                  <input type="button" value="Log" disabled={!this.state.enableLog} />
+                  <div className="two">
+                     Log minutes &ensp;
+                     <input id={`effortCount`} onChange={this.onLogNumberEdit} /> &ensp;
+                     <input type="button" value="Log" onClick={this.onLog} disabled={!this.state.enableLog} />
+                  </div>
                   <hr />
-                  File submission &ensp;
-                  <input type="file" disabled /> &ensp;
-                  <input type="button" value="Submit" disabled />
+                  <div className="three">
+                     File submission &ensp;
+                     <input type="file" disabled /> &ensp;
+                     <input type="button" value="Submit" disabled />
+                  </div>
                </footer>
             </div>
          </div>
@@ -164,9 +232,13 @@ class Work extends React.Component {
 
       try {
          const jobs = await DataStore.query(Jobs);
+         const effort = await DataStore.query(EffortLogs);
          console.log(jobs)
+         console.log(effort)
          this.setState({
-            jobs: [0,1,2,3].map(col => jobs.filter(j => j.column === col).map(j => this.job(j)))
+            jobs: [0,1,2,3].map(col => jobs.filter(j => j.column === col).map(j => this.job(j, effort))),
+            effort: effort.map(e => this.effortLog({jobTitle: jobs.find(j => j.id === e.jobsID).title , ...e})).sort((a,b) => a.date > b.date),
+            totalTime: effort.map(e => e.minutes).reduce((a,b)=>a+b,0)
          })
       } catch (error) {
          console.log("Error fetching jobs", error)
@@ -175,6 +247,7 @@ class Work extends React.Component {
    
    async componentDidMount() {
       console.log("Work mounted!");
+      this.refresh();
       const listener = Hub.listen("datastore", async hubData => {
          const  { event, data } = hubData.payload;
          if (event === "ready") {
@@ -184,7 +257,7 @@ class Work extends React.Component {
       DataStore.start();
    }
    
-   job = (jobData) => {
+   job = (jobData, effort) => {
       const key = uuidv4();
       const j = <Job 
          title={jobData.title}
@@ -192,20 +265,32 @@ class Work extends React.Component {
          key={key}
          notes={jobData.notes}
          id={jobData.id}
+         minutes={effort.filter(e => e.jobsID === jobData.id).map(e => e.minutes).reduce((a,b) => a+b, 0)}
          grab={(ev) => this.grabJob(ev, key)}
          drop={(ev) => this.dropJob(ev)}
       />
       return j
    }
 
+   effortLog = (effortLogData) => {
+      const key = uuidv4();
+      return <EffortLog
+         jobTitle={effortLogData.jobTitle}
+         minutes={effortLogData.minutes}
+         date={effortLogData.date}
+         key={key}
+      />
+   }
+
    moveJob = (jobKey, toCol) => {
       console.log("moving job " + jobKey)
       const newJobs = this.state.jobs.map((a)=>[...a])
-      // remove from old position
+      // remove from old position (or quit if the column is the same)
       let job;
       for (let i = 0; i < newJobs.length; i++) {
          job = newJobs[i].find((j)=>j.key===jobKey)
          if ( job ) {
+            if (i === toCol) return;
             newJobs[i] = newJobs[i].filter((j)=>j.key!==jobKey)
             break;
          }
@@ -219,7 +304,7 @@ class Work extends React.Component {
    
    grabJob = (ev, jobKey) => {
       const pageWidth = getWidth()
-      const colWidth = pageWidth/4
+      const colWidth = pageWidth/5
       const centerX = Math.floor(ev.pageX/colWidth)*colWidth + colWidth/2
       //console.log("colWidth " + colWidth)
       console.log("grabbed at " + ev.pageX +
@@ -230,7 +315,7 @@ class Work extends React.Component {
 
    dropJob = (ev) => {
       ev.preventDefault();
-      const droppedInto = Math.floor((ev.pageX+this.state.grabOffset) / (getWidth()/4))
+      const droppedInto = Math.floor((ev.pageX+this.state.grabOffset) / (getWidth()/5))
       console.log("dropped at " + ev.pageX + 
                   ", center dropped at " + (ev.pageX + this.state.grabOffset) + 
                   ", col " + droppedInto)
@@ -281,6 +366,13 @@ class Work extends React.Component {
 
 
    render() {
+      var initialOwed = 1000
+      var dollarsPerHour = 15
+      var totalMinutesRequired = Math.trunc(60*initialOwed/dollarsPerHour)
+      var timeLeft = totalMinutesRequired - this.state.totalTime;
+
+      var paid = (this.state.totalTime / 60 * dollarsPerHour).toFixed(2);
+
       return (
          <div className='app'>
             <header className='header'>
@@ -312,6 +404,19 @@ class Work extends React.Component {
                      <h4>Done:</h4>
                      <hr />
                      {this.state.jobs[3]}
+                  </div>
+                  <div className='jobsColumn'>
+                     <h4>Effort:</h4>
+                     <hr />
+                     {Math.trunc(this.state.totalTime/60)} hours, {this.state.totalTime%60} minutes spent.<br/>
+                     <b>{Math.trunc(timeLeft/60)} hours, {timeLeft%60} minutes</b> remaining.<br/>
+                     <small>(At 15$ per hour)</small>
+                     <hr />
+                     Cash owing: <b>${1000 - paid}</b>
+                     <hr />
+                     Records:
+                     <hr />
+                     {this.state.effort}
                   </div>
                </div>
             </div>

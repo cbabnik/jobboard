@@ -3,12 +3,10 @@
   "serviceConfiguration": {
     "apiName": "IndiasJobBoard",
     "serviceName": "AppSync",
-    "gqlSchemaPath": "C:\\Users\\Curtis\\workplace\\jobboard\\amplify\\backend\\api\\IndiasJobBoard\\schema.graphql",
     "defaultAuthType": {
       "mode": "API_KEY",
-      "expirationTime": 365,
-      "apiKeyExpirationDate": "2023-05-03T01:24:51.102Z",
-      "keyDescription": "Full API Access"
+      "keyDescription": "api key description",
+      "expirationTime": 30
     },
     "additionalAuthTypes": [
       {

@@ -114,9 +114,12 @@ body > #root {
 }
 .jobsColumn {
   display: inline-block;
-  width: calc(24% - 6px);
+  width: calc(20% - 8px);
   margin: 3px;
   min-height: 50vh
+}
+.effortLog {
+  font-size: 12px; 
 }
 .job {
   background-image: url("https://cdn.pixabay.com/photo/2013/07/12/14/29/sticky-note-148284_1280.png");
@@ -164,7 +167,16 @@ body > #root {
 .jobDetails > footer {
   position: absolute;
   bottom: 3px;
+}
+.jobDetails > footer > .one {
+  text-align: left;
+}
+.jobDetails > footer > .two {
   text-align: right;
+}
+.jobDetails > footer > .three {
+  display: flex;
+  justify-content: space-between;
 }
 .jobDetails > textarea {
   width: 98%;
