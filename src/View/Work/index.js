@@ -400,10 +400,12 @@ class Work extends React.Component {
                      <hr />
                      {this.state.jobs[2]}
                   </div>
-                  <div className='jobsColumn'>
+                  <div className='doneColumn'>
                      <h4>Done:</h4>
                      <hr />
-                     {this.state.jobs[3]}
+                     <div className='doneColumn2'>
+                        {this.state.jobs[3]}
+                     </div>
                   </div>
                   <div className='jobsColumn'>
                      <h4>Effort:</h4>
