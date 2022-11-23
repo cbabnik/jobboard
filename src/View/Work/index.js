@@ -232,9 +232,9 @@ class Work extends React.Component {
 
       try {
          const jobs = await DataStore.query(Jobs);
-         const effort = await DataStore.query(EffortLogs);
-         effort = effort.sort((a,b) => new Date(a.date) > new Date(b.date));
-         console.log(jobs)/
+         var effort = await DataStore.query(EffortLogs);
+         effort = effort.sort((a,b) => new Date(b.date) - new Date(a.date));
+         console.log(jobs)
          console.log(effort)
          this.setState({
             jobs: [0,1,2,3].map(col => jobs.filter(j => j.column === col).map(j => this.job(j, effort))),
