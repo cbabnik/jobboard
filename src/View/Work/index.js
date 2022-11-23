@@ -4,7 +4,7 @@ import '../../App.css';
 import { v4 as uuidv4} from 'uuid';
 import ReactMarkdown from 'react-markdown';
 
-import { Hub, DataStore, AWSDate } from 'aws-amplify';
+import { Hub, DataStore, AWSDate, a } from 'aws-amplify';
 import { EffortLogs, Jobs } from '../../models'
 
 // TODO:
@@ -233,11 +233,12 @@ class Work extends React.Component {
       try {
          const jobs = await DataStore.query(Jobs);
          const effort = await DataStore.query(EffortLogs);
+         effort = effort.sort((a,b) => new Date(a.date) < new Date(b.date));
          console.log(jobs)
          console.log(effort)
          this.setState({
             jobs: [0,1,2,3].map(col => jobs.filter(j => j.column === col).map(j => this.job(j, effort))),
-            effort: effort.map(e => this.effortLog({jobTitle: jobs.find(j => j.id === e.jobsID).title , ...e})).sort((a,b) => a.date > b.date),
+            effort: effort.map(e => this.effortLog({jobTitle: jobs.find(j => j.id === e.jobsID).title , ...e})),
             totalTime: effort.map(e => e.minutes).reduce((a,b)=>a+b,0)
          })
       } catch (error) {
